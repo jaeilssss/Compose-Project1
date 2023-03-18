@@ -17,7 +17,7 @@ class MainActivity2 : ComponentActivity() {
             ComposeFirstTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting2("Android2222")
+                    Greeting2("Android2222333333")
                 }
             }
         }
