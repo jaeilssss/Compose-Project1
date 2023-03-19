@@ -1,6 +1,7 @@
 package com.carrotez.composefirst
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -12,6 +13,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.carrotez.composefirst.component.InputField
 import com.carrotez.composefirst.ui.theme.ComposeFirstTheme
+import com.carrotez.composefirst.widget.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     @ExperimentalComposeUiApi
@@ -92,6 +97,29 @@ fun TopHeader(totalPerPerson : Double = 134.0){
 @Composable
 fun MainContent(){
 
+    BillForm(){ billAmt ->
+        Log.d("TAG", "MainContent : $billAmt")
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    ComposeFirstTheme {
+
+        MyApp{
+        }
+
+
+    }
+}
+
+@ExperimentalComposeUiApi
+@Composable
+fun BillForm(modifier: Modifier = Modifier,
+            onValueChange : (String) -> Unit = {}){
+
     val totalBillState = remember {
 
         mutableStateOf("0")
@@ -112,35 +140,59 @@ fun MainContent(){
         border = BorderStroke(width = 1.dp , color = Color.LightGray)
     ) {
 
-        Column() {
+        Column(modifier = Modifier.padding(6.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start) {
 
 
-            InputField(valueState = totalBillState,
+            InputField(
+                valueState = totalBillState,
                 labelId ="Enter Bill" ,
                 enabled = true,
                 isSingleLine = true,
                 onAction = KeyboardActions{
                     if(!validState) return@KeyboardActions
-                    //Todo - onvaluechanged
 
+                    onValueChange(totalBillState.value.trim())
 
                     keyboardController?.hide()
 
                 })
+            if(validState){
+
+                Row(modifier = Modifier.padding(3.dp),
+                horizontalArrangement = Arrangement.Start,
+                ){
+
+                    Text(text = "Split",
+                    modifier = Modifier.align(
+                        alignment = Alignment.CenterVertically
+                    ))
+
+                    Spacer(modifier = Modifier.width(120.dp))
+                    Row(modifier  = Modifier.padding(horizontal = 3.dp)) {
+
+
+                        RoundIconButton(imageVector = Icons.Default.Remove ,
+                            onClick = {
+                                Log.d("tag", "BillForm: remove")
+                            })
+                        RoundIconButton(imageVector = Icons.Default.Add ,
+                            onClick = {
+                                Log.d("tag", "BillForm: add")
+
+                            })
+                    }
+
+                }
+            }else{
+                Box(){
+
+
+                }
+            }
 
         }
-
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeFirstTheme {
-
-        MyApp{
-        }
-
 
     }
 }
