@@ -177,6 +177,10 @@ fun BillForm(modifier: Modifier = Modifier,
                             onClick = {
                                 Log.d("tag", "BillForm: remove")
                             })
+
+                        Text(text = "2",
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                            .padding(start = 9.dp, end = 9.dp))
                         RoundIconButton(imageVector = Icons.Default.Add ,
                             onClick = {
                                 Log.d("tag", "BillForm: add")
